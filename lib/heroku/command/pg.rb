@@ -60,6 +60,5 @@ module Heroku::Command
     def heroku_shared_postgresql_client(url)
       HerokuSharedPostgresql::Client.new(url)
     end
-    
   end
 end
