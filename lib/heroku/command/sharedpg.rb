@@ -4,9 +4,9 @@ require "heroku/shared_pg_resolver"
 require "heroku-postgresql/client"
 
 module Heroku::Command
-  class Pg < BaseWithApp
+  class SharedPg < BaseWithApp
 
-    # pg:reset <DATABASE>
+    # sharedpg:reset <DATABASE>
     #
     # delete all data in DATABASE
     def reset
@@ -29,7 +29,7 @@ module Heroku::Command
       end
     end
 
-    # pg:reset_role <DATABASE>
+    # sharedpg:reset_role <DATABASE>
     #
     # reset the role on the database (atomic)
     #
