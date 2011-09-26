@@ -1,2 +1,2 @@
 require 'heroku-shared-postgresql/client'
-require 'heroku/command/pg'
+require 'heroku/command/sharedpg'
