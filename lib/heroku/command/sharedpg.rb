@@ -1,5 +1,6 @@
 require "heroku/command/base"
 require "heroku/pgutils"
+require "heroku/pg_resolver"
 require "heroku/shared_pg_resolver"
 require "heroku-postgresql/client"
 
