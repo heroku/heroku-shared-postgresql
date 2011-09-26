@@ -11,7 +11,6 @@ module Heroku::Command
     #
     # delete all data in DATABASE
     def reset
-      deprecate_dash_dash_db("pg:reset")
       db = resolve_db(:required => 'pg:reset')
 
       display "Resetting #{db[:pretty_name]}"
@@ -37,7 +36,6 @@ module Heroku::Command
     # defaults to HEROKU_SHARED_URL if no DATABASE is specified
     #
     def reset_role
-      deprecate_dash_dash_db("pg:reset_role")
       db = resolve_db(:required => 'pg:reset_role')
 
       display "Resetting role on #{db[:pretty_name]}"
