@@ -6,6 +6,8 @@ require "heroku-postgresql/client"
 
 module Heroku::Command
   class SharedPg < BaseWithApp
+    include PgUtils
+    include PGResolver
 
     # sharedpg:reset <DATABASE>
     #
