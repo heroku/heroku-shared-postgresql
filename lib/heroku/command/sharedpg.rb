@@ -1,6 +1,6 @@
 require "heroku/command/base"
 require "heroku/pgutils"
-require "heroku/shared_pg_resolver"
+require "heroku/pg_resolver"
 require "heroku-postgresql/client"
 
 module Heroku::Command
@@ -21,7 +21,7 @@ module Heroku::Command
         case db[:name]
         when "SHARED_DATABASE"
           heroku.database_reset(app)
-        when PGResolver::SharedResolver.shared_addon_prefix
+        when Resolver.shared_addon_prefix
           token = resolve_auth_token
           heroku_shared_postgresql_client(db[:url]).reset
         else
@@ -46,7 +46,7 @@ module Heroku::Command
         case db[:name]
         when "SHARED_DATABASE"
           display " !    Resetting role is not supported on current SHARED_DATABASE version"
-        when PGResolver::SharedResolver.shared_addon_prefix
+        when Resolver.shared_addon_prefix
           token = resolve_auth_token
           heroku_shared_postgresql_client(db[:url]).reset_role
         else
