@@ -8,4 +8,5 @@ Most everything is modeled after Heroku Postgresql in order to have a
 similar client experience. In fact a lot of this is just monkey
 patched for the time being.
 
-# THIS IS NOT FULLY TESTED, EXPECT BREAKAGE
+`reset_role` and `reset` are currently working. We will be adding
+other features as we move forward.
