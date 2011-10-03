@@ -52,7 +52,7 @@ require "digest/sha2"
         retry_on_exception(RestClient::Exception) do
           response = @heroku_shared_postgresql_resource[path].get
           display_heroku_warning response
-          response
+          json_decode(response)
         end
       end
     end
@@ -61,7 +61,7 @@ require "digest/sha2"
       checking_client_version do
         response = @heroku_shared_postgresql_resource[path].post(json_encode(payload))
         display_heroku_warning response
-        response
+        json_decode(response)
       end
     end
 
@@ -69,7 +69,7 @@ require "digest/sha2"
       checking_client_version do
         response = @heroku_shared_postgresql_resource[path].put(json_encode(payload))
         display_heroku_warning response
-        response
+        json_decode(response)
       end
     end
   end

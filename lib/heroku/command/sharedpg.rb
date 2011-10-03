@@ -48,7 +48,19 @@ module Heroku::Command
         when "SHARED_DATABASE"
           display " !    Resetting role is not supported on current SHARED_DATABASE version"
         when Resolver.shared_addon_prefix
-          heroku_shared_postgresql_client(db[:url]).reset_role
+          response = heroku_shared_postgresql_client(db[:url]).reset_role
+          detected_app = app
+          vars = json_decode(response)
+          display "Setting new password...", false
+          heroku.add_config_vars(detected_app, vars)
+          display " done", false
+
+          begin
+            release = heroku.releases(detected_app).last
+            display(", #{release["name"]}", false) if release
+          rescue RestClient::RequestFailed => e
+          end
+          display "."
         else
           display " !    Resetting role is not supported on #{db[:name]}"
         end
