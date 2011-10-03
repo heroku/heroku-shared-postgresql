@@ -43,7 +43,12 @@ module Heroku::Command
         when "SHARED_DATABASE"
           heroku.database_reset(app)
         when Resolver.shared_addon_prefix
-          heroku_shared_postgresql_client(db[:url]).reset_database
+          display "Getting new database credentials", false
+          response = heroku_shared_postgresql_client(db[:url]).reset_database
+          detected_app = app
+          display "Setting new configuration", false
+          heroku.add_config_vars(detected_app, response)
+          display " done", false
         else
           heroku_postgresql_client(db[:url]).reset
         end
