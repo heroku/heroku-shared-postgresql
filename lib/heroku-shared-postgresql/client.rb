@@ -29,16 +29,6 @@ require "digest/sha2"
       Digest::SHA2.hexdigest(url)
     end
 
-    def sym_keys(c)
-      if c.is_a?(Array)
-        c.map {|e| sym_keys(e)}
-      else
-        c.inject({}) do |h, (k,v)|
-          h[k.to_sym] = v; h
-        end
-      end
-    end
-
     def checking_client_version
       begin
         yield
@@ -62,7 +52,7 @@ require "digest/sha2"
         retry_on_exception(RestClient::Exception) do
           response = @heroku_shared_postgresql_resource[path].get
           display_heroku_warning response
-          sym_keys(json_decode(response.to_s))
+          response
         end
       end
     end
@@ -71,7 +61,7 @@ require "digest/sha2"
       checking_client_version do
         response = @heroku_shared_postgresql_resource[path].post(json_encode(payload))
         display_heroku_warning response
-        sym_keys(json_decode(response.to_s))
+        response
       end
     end
 
@@ -79,7 +69,7 @@ require "digest/sha2"
       checking_client_version do
         response = @heroku_shared_postgresql_resource[path].put(json_encode(payload))
         display_heroku_warning response
-        sym_keys(json_decode(response.to_s))
+        response
       end
     end
   end
