@@ -1,12 +1,14 @@
 require "heroku/command/base"
 require "heroku/pgutils"
-require "heroku/pg_resolver"
+require "heroku/spg_resolver"
 require "heroku-postgresql/client"
 
 module Heroku::Command
+  # manage heroku shared database offering
+  #
   class SharedPg < BaseWithApp
     include PgUtils
-    include PGResolver
+    include SPGResolver
 
     # sharedpg:reset <DATABASE>
     #

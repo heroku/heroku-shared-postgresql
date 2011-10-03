@@ -1,4 +1,4 @@
-module PGResolver
+module SPGResolver
   private
 
   def config_vars
@@ -69,7 +69,7 @@ module PGResolver
   end
 
   class Resolver
-    include PGResolver
+    include SPGResolver
     attr_reader :url, :db_id
 
     def initialize(db_id, config_vars)
