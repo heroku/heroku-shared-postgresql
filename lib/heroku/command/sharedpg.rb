@@ -24,7 +24,6 @@ module Heroku::Command
         when "SHARED_DATABASE"
           heroku.database_reset(app)
         when Resolver.shared_addon_prefix
-          token = resolve_auth_token
           heroku_shared_postgresql_client(db[:url]).reset_database
         else
           heroku_postgresql_client(db[:url]).reset
@@ -49,7 +48,6 @@ module Heroku::Command
         when "SHARED_DATABASE"
           display " !    Resetting role is not supported on current SHARED_DATABASE version"
         when Resolver.shared_addon_prefix
-          token = resolve_auth_token
           heroku_shared_postgresql_client(db[:url]).reset_role
         else
           display " !    Resetting role is not supported on #{db[:name]}"
