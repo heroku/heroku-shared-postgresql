@@ -40,16 +40,21 @@ module Heroku::Command
 
       working_display 'Resetting' do
         case db[:name]
-        when "SHARED_DATABASE"
-          heroku.database_reset(app)
         when Resolver.shared_addon_prefix
-          display " getting new database credentials", false
+          display " getting new database credentials...", false
           response = heroku_shared_postgresql_client(db[:url]).reset_database
           detected_app = app
           heroku.add_config_vars(detected_app, response)
           display " done", false
+
+          begin
+            release = heroku.releases(detected_app).last
+            display(", #{release["name"]}", false) if release
+          rescue RestClient::RequestFailed => e
+          end
+          display "."
         else
-          heroku_postgresql_client(db[:url]).reset
+          display " !    Resetting database is not supported on #{db[:name]}"
         end
       end
     end
