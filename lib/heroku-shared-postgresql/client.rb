@@ -1,5 +1,6 @@
 require "heroku/helpers"
 require "digest/sha2"
+require "json"
 
  module HerokuSharedPostgresql
    class Client
@@ -33,7 +34,7 @@ require "digest/sha2"
       begin
         yield
       rescue RestClient::BadRequest => e
-        if message = json_decode(e.response.to_s)["upgrade_message"]
+        if message = JSON.parse(e.response.to_s)["upgrade_message"]
           abort(message)
         else
           raise e
@@ -52,7 +53,7 @@ require "digest/sha2"
         retry_on_exception(RestClient::Exception) do
           response = @heroku_shared_postgresql_resource[path].get
           display_heroku_warning response
-          json_decode(response.to_s)
+          JSON.parse(response.to_s)
         end
       end
     end
@@ -61,7 +62,7 @@ require "digest/sha2"
       checking_client_version do
         response = @heroku_shared_postgresql_resource[path].post(json_encode(payload))
         display_heroku_warning response
-        json_decode(response.to_s)
+        JSON.parse(response.to_s)
       end
     end
 
@@ -69,7 +70,7 @@ require "digest/sha2"
       checking_client_version do
         response = @heroku_shared_postgresql_resource[path].put(json_encode(payload))
         display_heroku_warning response
-        json_decode(response.to_s)
+        JSON.parse(response.to_s)
       end
     end
   end
