@@ -24,6 +24,10 @@ require "json"
       http_put("/#{@database_sha}/reset-password")
     end
 
+    def show_info
+      http_get("/#{@database_sha}/info")
+    end
+
     protected
 
     def sha(url)

@@ -10,11 +10,30 @@ module Heroku::Command
     include PgUtils
     include SPGResolver
 
+    # sharedpg:info <DATABASE>
+    #
+    # Show stats on DATABASE
+    def info
+      db = resolve_db(:required => 'sharedpg:info')
+
+      display "Statistics for #{db[:pretty_name]}"
+
+      working_display 'Acquiring info' do
+        case db[:name]
+        when Resolver.shared_addon_prefix
+          response = heroku_shared_postgresql_client(db[:url]).show_info
+          display "Current size: #{response[:bytes]*1024}KB"
+          #display "Current connections: #{response[:connections]}"
+          display " done", false
+        end
+      end
+    end
+
     # sharedpg:reset <DATABASE>
     #
     # delete all data in DATABASE
     def reset
-      db = resolve_db(:required => 'pg:reset')
+      db = resolve_db(:required => 'sharedpg:reset')
 
       display "Resetting #{db[:pretty_name]}"
       return unless confirm_command
@@ -38,7 +57,7 @@ module Heroku::Command
     # defaults to HEROKU_SHARED_URL if no DATABASE is specified
     #
     def reset_role
-      db = resolve_db(:required => 'pg:reset_role')
+      db = resolve_db(:required => 'sharedpg:reset_role')
 
       display "Resetting role on #{db[:pretty_name]}"
       return unless confirm_command
