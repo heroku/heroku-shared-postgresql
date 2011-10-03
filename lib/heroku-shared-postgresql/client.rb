@@ -8,8 +8,8 @@ require "digest/sha2"
 
      def initialize(url)
        @heroku_shared_postgresql_host = ENV["HEROKU_SHARED_POSTGRESQL_HOST"] || "https://yobuko.herokuapp.com"
-       @heroku_shared_database_resource = RestClient::Resource.new(
-         "#{@heroku_shared_database_host}/client",
+       @heroku_shared_postgresql_resource = RestClient::Resource.new(
+         "#{@heroku_shared_postgresql_host}/client",
          :headers => { :x_heroku_gem_version => Heroku::Client.version }
          )
        @database_sha = sha(url)
@@ -60,7 +60,7 @@ require "digest/sha2"
     def http_get(path)
       checking_client_version do
         retry_on_exception(RestClient::Exception) do
-          response = @heroku_shared_database_resource[path].get
+          response = @heroku_shared_postgresql_resource[path].get
           display_heroku_warning response
           sym_keys(json_decode(response.to_s))
         end
@@ -69,7 +69,7 @@ require "digest/sha2"
 
     def http_post(path, payload = {})
       checking_client_version do
-        response = @heroku_shared_database_resource[path].post(json_encode(payload))
+        response = @heroku_shared_postgresql_resource[path].post(json_encode(payload))
         display_heroku_warning response
         sym_keys(json_decode(response.to_s))
       end
@@ -77,7 +77,7 @@ require "digest/sha2"
 
     def http_put(path, payload = {})
       checking_client_version do
-        response = @heroku_shared_database_resource[path].put(json_encode(payload))
+        response = @heroku_shared_postgresql_resource[path].put(json_encode(payload))
         display_heroku_warning response
         sym_keys(json_decode(response.to_s))
       end
