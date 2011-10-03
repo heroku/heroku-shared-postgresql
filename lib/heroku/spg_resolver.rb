@@ -132,7 +132,7 @@ module SPGResolver
           dbs['DATABASE'] = val
         when 'SHARED_DATABASE_URL'
           dbs['SHARED_DATABASE'] = val
-        when /^(#{shared_addon_prefix}\w+)_URL$/
+        when "#{shared_addon_prefix.upcase}_URL"
           dbs['HEROKU_SHARED_POSTGRESQL'] = val
         when /^(#{addon_prefix}\w+)_URL$/
           dbs[$+] = val # $+ is the last match

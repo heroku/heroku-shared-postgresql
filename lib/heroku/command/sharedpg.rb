@@ -25,7 +25,7 @@ module Heroku::Command
           heroku.database_reset(app)
         when Resolver.shared_addon_prefix
           token = resolve_auth_token
-          heroku_shared_postgresql_client(db[:url]).reset
+          heroku_shared_postgresql_client(db[:url]).reset_database
         else
           heroku_postgresql_client(db[:url]).reset
         end
@@ -58,6 +58,12 @@ module Heroku::Command
     end
 
     private
+
+    def working_display(msg)
+      redisplay "#{msg}..."
+      yield if block_given?
+      redisplay "#{msg}... done\n"
+    end
 
     def heroku_shared_postgresql_client(url)
       HerokuSharedPostgresql::Client.new(url)

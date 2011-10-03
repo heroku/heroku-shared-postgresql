@@ -7,9 +7,9 @@ require "digest/sha2"
      include Heroku::Helpers
 
      def initialize(url)
-       @heroku_shared_postgresql_host = ENV["HEROKU_SHARED_POSTGRESQL_HOST"] || "https://yobuko.heroku.com"
+       @heroku_shared_postgresql_host = ENV["HEROKU_SHARED_POSTGRESQL_HOST"] || "https://yobuko.herokuapp.com"
        @heroku_shared_database_resource = RestClient::Resource.new(
-         "#{@heroku_shared_database_host}/heroku/client",
+         "#{@heroku_shared_database_host}/client",
          :headers => { :x_heroku_gem_version => Heroku::Client.version }
          )
        @database_sha = sha(url)
@@ -76,8 +76,8 @@ require "digest/sha2"
     end
 
     def http_put(path, payload = {})
-      check_errors do
-        response = @heroku_yobuko_resource[path].put(json_encode(payload))
+      checking_client_version do
+        response = @heroku_shared_database_resource[path].put(json_encode(payload))
         display_heroku_warning response
         sym_keys(json_decode(response.to_s))
       end
