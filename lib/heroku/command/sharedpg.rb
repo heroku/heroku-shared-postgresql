@@ -18,14 +18,14 @@ module Heroku::Command
 
       display "Statistics for #{db[:pretty_name]}"
 
-      working_display 'Acquiring info' do
-        case db[:name]
-        when Resolver.shared_addon_prefix
-          response = heroku_shared_postgresql_client(db[:url]).show_info
-          display "Current size: #{response[:bytes]*1024}KB"
-          #display "Current connections: #{response[:connections]}"
-          display " done", false
-        end
+      display "Acquiring info..."
+      case db[:name]
+      when Resolver.shared_addon_prefix
+        response = heroku_shared_postgresql_client(db[:url]).show_info
+        kilobytes = "#{response[:bytes].to_i * 1024}KB"
+        display "  Current size: #{kilobytes}"
+        #display "  Current connections: #{response[:connections]}"
+        display "Done", true
       end
     end
 
