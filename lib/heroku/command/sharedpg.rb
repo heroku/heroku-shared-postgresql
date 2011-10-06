@@ -22,9 +22,9 @@ module Heroku::Command
       case db[:name]
       when Resolver.shared_addon_prefix
         response = heroku_shared_postgresql_client(db[:url]).show_info
-        kilobytes = "#{response[:bytes].to_i * 1024}KB"
-        display "  Current size: #{kilobytes}"
-        #display "  Current connections: #{response[:connections]}"
+        response.each do |key, value|
+          display " #{key.capitalize}: #{value}"
+        end
         display "Done", true
       end
     end
