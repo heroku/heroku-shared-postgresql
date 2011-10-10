@@ -23,7 +23,9 @@ module Heroku::Command
       when Resolver.shared_addon_prefix
         response = heroku_shared_postgresql_client(db[:url]).show_info
         response.each do |key, value|
-          display " #{key.gsub('_', ' ').capitalize}: #{value ? value : 0}"
+          if key =~ /(connection|bytes)/i
+            display " #{key.gsub('_', ' ').capitalize}: #{value ? value : 0}"
+          end
         end
         display "Done", true
       end
