@@ -17,11 +17,11 @@ require "json"
     end
 
     def reset_database
-      http_put("/#{@database_sha}/reset-database")
+      http_post("/#{@database_sha}/reset-database")
     end
 
     def reset_role
-      http_put("/#{@database_sha}/reset-password")
+      http_post("/#{@database_sha}/reset-password")
     end
 
     def show_info
