@@ -10,7 +10,7 @@ module Heroku::Command
     include PgUtils
     include SPGResolver
 
-    # sharedpg:info <DATABASE>
+    # sharedpg:info
     #
     # Show stats on DATABASE
     #
@@ -33,7 +33,7 @@ module Heroku::Command
       end
     end
 
-    # sharedpg:reset <DATABASE>
+    # sharedpg:reset
     #
     # delete all data in DATABASE
     #
@@ -65,9 +65,9 @@ module Heroku::Command
       end
     end
 
-    # sharedpg:reset_password <DATABASE>
+    # sharedpg:reset_password
     #
-    # reset the password on the database (atomic)
+    # reset the password on the database
     #
     # defaults to HEROKU_SHARED_POSTGRESQL_URL if no DATABASE is specified
     #
