@@ -35,7 +35,7 @@ module Heroku::Command
 
     # sharedpg:reset
     #
-    # delete all data in DATABASE
+    # Delete all data in DATABASE
     #
     # defaults to HEROKU_SHARED_POSTGRESQL_URL if no DATABASE is specified
     def reset
@@ -67,7 +67,7 @@ module Heroku::Command
 
     # sharedpg:reset_password
     #
-    # reset the password on the database
+    # Reset the password on the database
     #
     # defaults to HEROKU_SHARED_POSTGRESQL_URL if no DATABASE is specified
     #

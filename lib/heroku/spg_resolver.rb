@@ -22,7 +22,7 @@ module SPGResolver
   end
 
   def resolve_db(options={})
-    db_id = db_flag
+    db_id = Resolver.shared_addon_prefix
     unless db_id
       if options[:allow_default]
         db_id = "DATABASE"
