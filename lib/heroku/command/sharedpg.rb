@@ -13,8 +13,10 @@ module Heroku::Command
     # sharedpg:info <DATABASE>
     #
     # Show stats on DATABASE
+    #
+    # defaults to HEROKU_SHARED_POSTGRESQL_URL if no DATABASE is specified
     def info
-      db = resolve_db(:required => 'sharedpg:info')
+      db = resolve_db
 
       display "Statistics for #{db[:pretty_name]}"
 
@@ -34,8 +36,10 @@ module Heroku::Command
     # sharedpg:reset <DATABASE>
     #
     # delete all data in DATABASE
+    #
+    # defaults to HEROKU_SHARED_POSTGRESQL_URL if no DATABASE is specified
     def reset
-      db = resolve_db(:required => 'sharedpg:reset')
+      db = resolve_db
 
       display "Resetting #{db[:pretty_name]}"
       return unless confirm_command
@@ -61,24 +65,26 @@ module Heroku::Command
       end
     end
 
-    # sharedpg:reset_role <DATABASE>
+    # sharedpg:reset_password <DATABASE>
     #
-    # reset the role on the database (atomic)
+    # reset the password on the database (atomic)
     #
-    # defaults to HEROKU_SHARED_URL if no DATABASE is specified
+    # defaults to HEROKU_SHARED_POSTGRESQL_URL if no DATABASE is specified
     #
-    def reset_role
-      db = resolve_db(:required => 'sharedpg:reset_role')
+    def reset_password
+      db = resolve_db
 
-      display "Resetting role on #{db[:pretty_name]}"
+      display "Resetting password on #{db[:pretty_name]}"
       return unless confirm_command
 
-      working_display 'Resetting role' do
+      working_display 'Resetting password' do
         case db[:name]
         when "SHARED_DATABASE"
-          display " !    Resetting role is not supported on current SHARED_DATABASE version"
+          display " !    Resetting password is not supported on current SHARED_DATABASE version"
+        when Resolver.addon_prefix
+          display " !    See heroku pg:reset"
         when Resolver.shared_addon_prefix
-          response = heroku_shared_postgresql_client(db[:url]).reset_role
+          response = heroku_shared_postgresql_client(db[:url]).reset_password
           detected_app = app
           display "Setting new password...", false
           heroku.add_config_vars(detected_app, response)
@@ -91,7 +97,7 @@ module Heroku::Command
           end
           display "."
         else
-          display " !    Resetting role is not supported on #{db[:name]}"
+          display " !    Resetting password is not supported on #{db[:name]}"
         end
       end
     end

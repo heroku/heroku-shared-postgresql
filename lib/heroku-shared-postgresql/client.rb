@@ -20,7 +20,7 @@ require "json"
       http_post("/#{@database_sha}/reset-database")
     end
 
-    def reset_role
+    def reset_password
       http_post("/#{@database_sha}/reset-password")
     end
 
