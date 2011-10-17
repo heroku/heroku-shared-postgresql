@@ -104,7 +104,7 @@ module Heroku::Command
 
     # sharedpg:promote
     #
-    # sets #{Resolver.shared_addon_prefix} as your DATABASE_URL
+    # sets HEROKU_SHARED_POSTGRESQL_URL as your DATABASE_URL
     #
     def promote
       follower_db = resolve_db
