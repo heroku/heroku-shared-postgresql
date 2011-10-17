@@ -102,6 +102,19 @@ module Heroku::Command
       end
     end
 
+    # sharedpg:promote
+    #
+    # sets #{Resolver.shared_addon_prefix} as your DATABASE_URL
+    #
+    def promote
+      follower_db = resolve_db
+      abort( " !   DATABASE_URL is already set to #{follower_db[:name]}") if follower_db[:default]
+
+      working_display "-----> Promoting #{follower_db[:name]} to DATABASE_URL" do
+        heroku.add_config_vars(app, {"DATABASE_URL" => follower_db[:url]})
+      end
+    end
+
     private
 
     def working_display(msg)
