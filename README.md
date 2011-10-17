@@ -8,5 +8,9 @@ Most everything is modeled after Heroku Postgresql in order to have a
 similar client experience. In fact a lot of this is just monkey
 patched for the time being.
 
-`reset_role` and `reset` are currently working. We will be adding
-other features as we move forward.
+    Additional commands, type "heroku help COMMAND" for more details:
+
+      sharedpg:info            # Show stats on DATABASE
+      sharedpg:promote         # sets HEROKU_SHARED_POSTGRESQL_URL as your DATABASE_URL
+      sharedpg:reset           # Delete all data in DATABASE
+      sharedpg:reset_password  # Reset the password on the database
