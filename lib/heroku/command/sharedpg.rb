@@ -1,3 +1,4 @@
+require 'uri'
 require "heroku/command/base"
 require "heroku/pgutils"
 require "heroku/spg_resolver"
@@ -30,6 +31,23 @@ module Heroku::Command
           end
         end
         display "Done", true
+      end
+    end
+
+    # sharedpg:psql
+    #
+    # open a psql shell to a HEROKU_SHARED_POSTGRESQL
+    #
+    def psql
+      uri = generate_ingress_uri("Connecting")
+      ENV["PGPASSWORD"] = uri.password
+      ENV["PGSSLMODE"]  = 'require'
+      begin
+        exec "psql -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
+      rescue Errno::ENOENT
+        display " !   The local psql command could not be located"
+        display " !   For help installing psql, see http://devcenter.heroku.com/articles/local-postgresql"
+        abort
       end
     end
 
@@ -116,6 +134,14 @@ module Heroku::Command
     end
 
     private
+
+    def generate_ingress_uri(action)
+      db = resolve_db(:allow_default => true)
+      abort " !  Cannot ingress to a shared database" if "SHARED_DATABASE" == db[:name]
+      hspc = heroku_shared_postgresql_client(db[:url])
+      working_display("#{action} to #{db[:name]}")
+      return URI.parse(db[:url])
+    end
 
     def working_display(msg)
       redisplay "#{msg}..."
