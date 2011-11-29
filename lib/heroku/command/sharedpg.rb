@@ -72,6 +72,29 @@ module Heroku::Command
         exec "pg_dump #{pg_dump_options} -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
       rescue Errno::ENOENT
         display " !   The local pg_dump command could not be located"
+        display " !   For help installing pg_dump, see http://devcenter.heroku.com/articles/local-postgresql"
+        abort
+      end
+    end
+
+    # sharedpg:import [INPUT]
+    #
+    # Restore a HEROKU_SHARED_POSTGRESQL from SQL
+    #
+    def import
+      timeout = extract_option('--timeout', 30).to_i
+      filename = args.shift.downcase.strip || nil
+      if filename.nil? or !File.exists?(filename)
+          abort("File not found.  Usage: heroku sharedpg:export <INPUT_FILE>")
+      end
+      uri = generate_ingress_uri("Connecting")
+      ENV["PGPASSWORD"] = uri.password
+      ENV["PGSSLMODE"]  = 'require'
+      input = (filename == '-' : filename ? "< #{filename}")
+      begin
+        exec "psql -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]} input"
+      rescue Errno::ENOENT
+        display " !   The local psql command could not be located"
         display " !   For help installing psql, see http://devcenter.heroku.com/articles/local-postgresql"
         abort
       end
