@@ -68,6 +68,7 @@ module Heroku::Command
       unless output == '-'
         pg_dump_options += " -o #{output}"
       end
+p pg_dump_options
       begin
         exec "pg_dump #{pg_dump_options} -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
       rescue Errno::ENOENT
