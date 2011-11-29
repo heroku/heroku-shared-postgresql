@@ -59,7 +59,7 @@ module Heroku::Command
       timeout = extract_option('--timeout', 30).to_i
       output = args.shift.downcase.strip || nil
       if output.nil? or File.exists?(output)
-          abort(" !  Usage: heroku sharedpg:export <OUTPUT_FILE>")
+          abort("File exists.  Usage: heroku sharedpg:export <OUTPUT_FILE>")
       end
       uri = generate_ingress_uri("Connecting")
       ENV["PGPASSWORD"] = uri.password
