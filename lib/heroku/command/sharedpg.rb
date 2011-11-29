@@ -66,9 +66,8 @@ module Heroku::Command
       ENV["PGSSLMODE"]  = 'require'
       pg_dump_options = "-b -c -E UTF8"
       unless output == '-'
-        pg_dump_options += " -o #{output}"
+        pg_dump_options += " -f #{output}"
       end
-p pg_dump_options
       begin
         exec "pg_dump #{pg_dump_options} -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
       rescue Errno::ENOENT
