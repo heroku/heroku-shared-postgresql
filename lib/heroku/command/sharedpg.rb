@@ -51,17 +51,25 @@ module Heroku::Command
       end
     end
 
-    # sharedpg:export
+    # sharedpg:export [OUTPUT]
     #
     # Dump a HEROKU_SHARED_POSTGRESQL using pg_dump
     #
     def export
+      timeout = extract_option('--timeout', 30).to_i
+      output = args.shift.downcase.strip || nil
+      if output.nil? or File.exists?(output)
+          abort(" !  Usage: heroku sharedpg:export <OUTPUT_FILE>")
+      end
       uri = generate_ingress_uri("Connecting")
       ENV["PGPASSWORD"] = uri.password
       ENV["PGSSLMODE"]  = 'require'
-      options = "-b -c -E UTF8"
+      pg_dump_options = "-b -c -E UTF8"
+      unless output == '-'
+        pg_dump_options += " -o #{output}"
+      end
       begin
-        exec "pg_dump #{options} -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
+        exec "pg_dump #{pg_dump_options} -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
       rescue Errno::ENOENT
         display " !   The local pg_dump command could not be located"
         display " !   For help installing psql, see http://devcenter.heroku.com/articles/local-postgresql"
