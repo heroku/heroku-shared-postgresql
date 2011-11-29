@@ -59,7 +59,7 @@ module Heroku::Command
       uri = generate_ingress_uri("Connecting")
       ENV["PGPASSWORD"] = uri.password
       ENV["PGSSLMODE"]  = 'require'
-      options = "-b -c -C -E UTF8"
+      options = "-b -c -E UTF8"
       begin
         exec "pg_dump #{options} -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
       rescue Errno::ENOENT
