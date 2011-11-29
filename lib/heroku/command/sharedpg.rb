@@ -51,6 +51,24 @@ module Heroku::Command
       end
     end
 
+    # sharedpg:export
+    #
+    # Dump a HEROKU_SHARED_POSTGRESQL using pg_dump
+    #
+    def export
+      uri = generate_ingress_uri("Connecting")
+      ENV["PGPASSWORD"] = uri.password
+      ENV["PGSSLMODE"]  = 'require'
+      options = "-b -c -C -E UTF8"
+      begin
+        exec "pg_dump #{options} -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
+      rescue Errno::ENOENT
+        display " !   The local pg_dump command could not be located"
+        display " !   For help installing psql, see http://devcenter.heroku.com/articles/local-postgresql"
+        abort
+      end
+    end
+
     # sharedpg:reset
     #
     # Delete all data in DATABASE
