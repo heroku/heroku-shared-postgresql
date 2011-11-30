@@ -64,7 +64,7 @@ module Heroku::Command
       uri = generate_ingress_uri("Connecting")
       ENV["PGPASSWORD"] = uri.password
       ENV["PGSSLMODE"]  = 'require'
-      pg_dump_options = "-b -c -E UTF8 -O"
+      pg_dump_options = "-b -c -E UTF8 -O -x --inserts"
       unless output == '-'
         pg_dump_options += " -f #{output}"
       end
