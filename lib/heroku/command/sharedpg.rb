@@ -92,7 +92,7 @@ module Heroku::Command
       ENV["PGSSLMODE"]  = 'require'
       input = (filename == '-' ? filename : "< #{filename}")
       begin
-        exec "psql -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]} input"
+        exec "psql -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]} #{input}"
       rescue Errno::ENOENT
         display " !   The local psql command could not be located"
         display " !   For help installing psql, see http://devcenter.heroku.com/articles/local-postgresql"
