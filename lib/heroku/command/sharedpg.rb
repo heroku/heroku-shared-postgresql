@@ -64,7 +64,7 @@ module Heroku::Command
       uri = generate_ingress_uri("Connecting")
       ENV["PGPASSWORD"] = uri.password
       ENV["PGSSLMODE"]  = 'require'
-      pg_dump_options = "-b -c -E UTF8"
+      pg_dump_options = "-b -c -E UTF8 -O"
       unless output == '-'
         pg_dump_options += " -f #{output}"
       end
@@ -90,7 +90,7 @@ module Heroku::Command
       uri = generate_ingress_uri("Connecting")
       ENV["PGPASSWORD"] = uri.password
       ENV["PGSSLMODE"]  = 'require'
-      input = (filename == '-' : filename ? "< #{filename}")
+      input = (filename == '-' ? filename : "< #{filename}")
       begin
         exec "psql -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]} input"
       rescue Errno::ENOENT
