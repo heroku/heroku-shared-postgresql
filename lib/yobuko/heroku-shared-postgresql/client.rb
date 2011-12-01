@@ -8,7 +8,7 @@ require "json"
      include Heroku::Helpers
 
      def initialize(url)
-       @heroku_shared_postgresql_host = ENV["HEROKU_SHARED_POSTGRESQL_HOST"] || "https://yobuko-production.herokuapp.com"
+       @heroku_shared_postgresql_host = ENV["HEROKU_SHARED_POSTGRESQL_HOST"] || "https://heroku-shared-production.herokuapp.com"
        @database_sha = sha(url)
        @heroku_shared_postgresql_resource = RestClient::Resource.new(
          "#{@heroku_shared_postgresql_host}/client",
