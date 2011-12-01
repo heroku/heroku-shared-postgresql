@@ -48,22 +48,6 @@ module SPGResolver
     abort
   end
 
-  def specified_db?
-    db_flag
-  end
-
-  def db_flag
-    @db_flag ||= args.shift
-  end
-
-  def specified_db_or_all
-    if specified_db?
-      yield resolve_db
-    else
-      Resolver.all(config_vars).each { |db| yield db }
-    end
-  end
-
   def display(message='', newline=true)
     super if message
   end
