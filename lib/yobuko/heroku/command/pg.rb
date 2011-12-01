@@ -134,6 +134,67 @@ module Heroku::Command
       end
     end
 
+    # pg:export <OUTPUT_FILE>
+    #
+    # Export a Yobuko database to <OUTPUT_FILE>
+    #
+    def export
+      timeout = extract_option('--timeout', 30).to_i
+      db = resolve_db
+      case db[:name]
+      when Resolver.shared_addon_prefix
+        output = args.shift.downcase.strip || nil
+        if output.nil? or File.exists?(output)
+            error("File exists.  Usage: heroku pg:export <OUTPUT_FILE>")
+        end
+        uri = generate_ingress_uri("Connecting...")
+        ENV["PGPASSWORD"] = uri.password
+        ENV["PGSSLMODE"]  = 'require'
+        pg_dump_options = "-b -E UTF8 -O -x --inserts"
+        unless output == '-'
+          pg_dump_options += " -f #{output}"
+        end
+        begin
+          exec "pg_dump #{pg_dump_options} -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]}"
+        rescue Errno::ENOENT
+          output_with_bang "The local pg_dump command could not be located"
+          output_with_bang "For help installing pg_dump, see http://devcenter.heroku.com/articles/local-postgresql"
+          abort
+        end
+      else
+        output_with_bang "Export only allowed on Yobuko databases during private beta"
+      end
+    end
+
+    # pg:import <INPUT_FILE>
+    #
+    # Import a Yobuko database into a HEROKU_SHARED_POSTGRESQL_[COLOR] using <INPUT_FILE> 
+    #
+    def import
+      timeout = extract_option('--timeout', 30).to_i
+      db = resolve_db
+      case db[:name]
+      when Resolver.shared_addon_prefix
+        filename = args.shift.downcase.strip || nil
+        if filename.nil? or !File.exists?(filename)
+            error("File not found.  Usage: heroku pg:export <INPUT_FILE>")
+        end
+        uri = generate_ingress_uri("Connecting")
+        ENV["PGPASSWORD"] = uri.password
+        ENV["PGSSLMODE"]  = 'require'
+        input = (filename == '-' ? filename : "< #{filename}")
+        begin
+          exec "psql -U #{uri.user} -h #{uri.host} -p #{uri.port || 5432} #{uri.path[1..-1]} #{input}"
+        rescue Errno::ENOENT
+          output_with_bang "The local psql command could not be located"
+          output_with_bang "For help installing psql, see http://devcenter.heroku.com/articles/local-postgresql"
+          abort
+        end
+      else
+        output_with_bang "Import only allowed on version 2 Yobuko databases"
+      end
+    end
+
 private
 
     def heroku_shared_postgresql_client(url)
