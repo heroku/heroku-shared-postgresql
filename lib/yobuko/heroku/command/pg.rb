@@ -34,7 +34,7 @@ module Heroku::Command
       display "   \"dbname=#{uri.path[1..-1]} host=#{uri.host} port=#{uri.port || 5432} user=#{uri.user} password=#{uri.password} sslmode=require\""
     end
 
-    # pg:promote <DATABASE>
+    # pg:promote [DATABASE]
     #
     # sets DATABASE as your DATABASE_URL
     #
@@ -69,7 +69,7 @@ module Heroku::Command
       end
     end
 
-    # pg:reset <DATABASE>
+    # pg:reset [DATABASE]
     #
     # delete all data in DATABASE
     def reset
@@ -147,7 +147,7 @@ module Heroku::Command
       end
     end
 
-    # pg:export <DATABASE> <OUTPUT_FILE>
+    # pg:export [DATABASE] <OUTPUT_FILE>
     #
     # Export a Yobuko database to <OUTPUT_FILE>
     #
@@ -179,7 +179,7 @@ module Heroku::Command
       end
     end
 
-    # pg:import <DATABASE> <INPUT_FILE>
+    # pg:import [DATABASE] <INPUT_FILE>
     #
     # Import a Yobuko database into a HEROKU_SHARED_POSTGRESQL_[COLOR] using <INPUT_FILE> 
     #
