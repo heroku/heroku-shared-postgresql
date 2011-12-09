@@ -12,7 +12,7 @@ module Heroku::Command
 
     # pg:info [DATABASE]
     #
-    # display database information
+    # Display database information
     #
     # defaults to all databases if no DATABASE is specified
     #
@@ -22,7 +22,7 @@ module Heroku::Command
 
     # pg:ingress [DATABASE]
     #
-    # allow direct connections to the database from this IP for one minute
+    # Show connection info
     #
     # (dedicated only)
     # defaults to DATABASE_URL databases if no DATABASE is specified
@@ -36,7 +36,7 @@ module Heroku::Command
 
     # pg:promote [DATABASE]
     #
-    # sets DATABASE as your DATABASE_URL
+    # Sets DATABASE as your DATABASE_URL
     #
     def promote
       deprecate_dash_dash_db("pg:promote")
@@ -50,7 +50,7 @@ module Heroku::Command
 
     # pg:psql [DATABASE]
     #
-    # open a psql shell to the database
+    # Open a psql shell to the database
     #
     # (dedicated only)
     # defaults to DATABASE_URL databases if no DATABASE is specified
@@ -71,7 +71,8 @@ module Heroku::Command
 
     # pg:reset [DATABASE]
     #
-    # delete all data in DATABASE
+    # Delete all data in DATABASE
+    #
     def reset
       deprecate_dash_dash_db("pg:reset")
       db = resolve_db(:required => 'pg:reset')
@@ -149,7 +150,7 @@ module Heroku::Command
 
     # pg:export [DATABASE] <OUTPUT_FILE>
     #
-    # Export a Yobuko database to <OUTPUT_FILE>
+    # Export to <OUTPUT_FILE>
     #
     def export
       timeout = extract_option('--timeout', 30).to_i
@@ -181,7 +182,7 @@ module Heroku::Command
 
     # pg:import [DATABASE] <INPUT_FILE>
     #
-    # Import into a Yobuko database using <INPUT_FILE>
+    # Import from <INPUT_FILE>
     #
     def import
       timeout = extract_option('--timeout', 30).to_i
