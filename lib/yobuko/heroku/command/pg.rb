@@ -181,7 +181,7 @@ module Heroku::Command
 
     # pg:import [DATABASE] <INPUT_FILE>
     #
-    # Import a Yobuko database into a HEROKU_SHARED_POSTGRESQL_[COLOR] using <INPUT_FILE> 
+    # Import into a Yobuko database using <INPUT_FILE>
     #
     def import
       timeout = extract_option('--timeout', 30).to_i
