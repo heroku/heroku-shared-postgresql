@@ -16,10 +16,10 @@ module PGResolver
           dbs['DATABASE'] = val
         when 'SHARED_DATABASE_URL'
           dbs['SHARED_DATABASE'] = val
-        when /^(#{shared_addon_prefix}\w+)_URL$/
-          dbs["HEROKU_SHARED_POSTGRESQL"] = val
+        when /\A(#{shared_addon_prefix}\w+)_URL\Z/
+          dbs[$1] = val
         when /^(#{addon_prefix}\w+)_URL$/
-          dbs[$+] = val # $+ is the last match
+          dbs[$1] = val
         end
       end
       return dbs
