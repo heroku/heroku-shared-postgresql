@@ -155,7 +155,7 @@ module Heroku::Command
       timeout = extract_option('--timeout', 30).to_i
       db = resolve_db
       case db[:name]
-      when /\A#{Resolver.shared_addon_prefix}\w+/
+      when /\A(#{Resolver.shared_addon_prefix}\w+|#{Resolver.shared_addon_prefix})/
         output = args.shift.downcase.strip || nil
         if output.nil? or File.exists?(output)
             error("File exists.  Usage: heroku pg:export <DATABASE> <OUTPUT_FILE>")
@@ -187,7 +187,7 @@ module Heroku::Command
       timeout = extract_option('--timeout', 30).to_i
       db = resolve_db
       case db[:name]
-      when /\A#{Resolver.shared_addon_prefix}\w+/
+      when /\A(#{Resolver.shared_addon_prefix}\w+|#{Resolver.shared_addon_prefix})/
         filename = args.shift.downcase.strip || nil
         if filename.nil? or !File.exists?(filename)
             error("File not found.  Usage: heroku pg:export <DATABASE> <INPUT_FILE>")
@@ -283,7 +283,7 @@ private
       case db[:name]
       when "SHARED_DATABASE"
         error "Cannot ingress to a shared database" if "SHARED_DATABASE" == db[:name]
-      when /\A#{Resolver.shared_addon_prefix}\w+/
+      when /\A(#{Resolver.shared_addon_prefix}\w+|#{Resolver.shared_addon_prefix})/
         working_display("#{action} to #{db[:name]}") if action
         return URI.parse(db[:url])
       else
