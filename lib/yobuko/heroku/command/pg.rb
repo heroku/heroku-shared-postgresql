@@ -209,6 +209,28 @@ module Heroku::Command
       end
     end
 
+    # pg:reset_password [DATABASE]
+    #
+    # Reset the credentials on DATABASE
+    #
+    def reset_password
+      deprecate_dash_dash_db("pg:reset")
+      db = resolve_db(:required => 'pg:reset')
+      display "-----> Resetting password for #{db[:pretty_name]}"
+      return unless confirm_command
+
+      working_display 'Resetting' do
+        case db[:name]
+        when /\A#{Resolver.shared_addon_prefix}\w+/
+          display " password", false
+          response = heroku_shared_postgresql_client(db[:url]).reset_password
+          heroku.add_config_vars(app, {"DATABASE_URL" => response["url"]}) if db[:default]
+        else
+          output_with_bang "Resetting password not currently supported for #{db[:pretty_name]}"
+        end
+      end
+    end
+
 private
 
     def working_display(msg)
