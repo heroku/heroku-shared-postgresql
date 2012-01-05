@@ -280,7 +280,7 @@ private
     def display_info_shared_postgresql(db)
       response = heroku_shared_postgresql_client(db[:url]).show_info
       response.each do |key, value|
-        display " #{key.gsub('_', ' ').capitalize}: #{value ? value : 0}"
+        display "#{key.gsub('_', ' ').capitalize}: #{value ? value : 0}"
       end
     end
 
